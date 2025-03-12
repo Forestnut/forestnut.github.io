@@ -367,41 +367,206 @@ body {
     margin-bottom: 1rem;
 }
 
-/* Quiz Section */
-.quiz-container {
+/* Game Section */
+.game-container {
     width: 100%;
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 2rem;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
 }
 
-.answers-grid {
+.game-stage {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.game-visualization {
+    position: relative;
+    height: 300px;
+    background: var(--light-bg);
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.game-character {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    transition: transform 0.5s ease;
+}
+
+.game-house {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    width: 60px;
+    height: 60px;
+}
+
+.code-options {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.code-option {
+    padding: 1.5rem;
+    background: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Consolas', monospace;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.code-option:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.code-option.correct {
+    background: #4ade80;
+    border-color: #4ade80;
+    color: white;
+}
+
+.code-option.wrong {
+    background: #f87171;
+    border-color: #f87171;
+    color: white;
+}
+
+.game-progress {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.progress-dots {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.progress-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--light-bg);
+    transition: all 0.3s ease;
+}
+
+.progress-dot.completed {
+    background: var(--primary-color);
+    transform: scale(1.2);
+}
+
+.game-message {
+    text-align: center;
+    padding: 2rem;
+    background: var(--gradient-primary);
+    color: white;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+
+.game-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Game Section Styles */
+.game-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.game-progress {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.progress-dots {
+    display: flex;
+    gap: 10px;
+}
+
+.progress-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #ddd;
+    cursor: pointer;
+}
+
+.progress-dot.active {
+    background-color: #4CAF50;
+}
+
+.game-stage {
+    display: flex;
+    flex-direction: column;
     gap: 20px;
     margin: 20px 0;
 }
 
-.answer-button {
-    padding: 1rem;
-    border: 2px solid var(--primary-color);
+.game-visualization {
+    position: relative;
+    min-height: 200px;
+    background-color: #f5f5f5;
     border-radius: 8px;
-    background: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    padding: 1rem 2rem;
-    font-weight: 500;
+    padding: 20px;
 }
 
-.answer-button:hover {
-    background: var(--gradient-primary);
-    border-color: transparent;
-    color: white;
-    transform: translateY(-2px);
+.code-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.game-message {
+    text-align: center;
+    margin: 20px 0;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .game-stage {
+        flex-direction: column;
+    }
+    
+    .code-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .code-options {
+        grid-template-columns: 1fr;
+    }
+
+    .game-visualization {
+        height: 250px;
+    }
 }
 
 /* Stats Section */
@@ -1010,4 +1175,78 @@ body {
     margin-bottom: 60px; /* Wysokość footer */
     min-height: calc(100vh - 60px);
     padding-bottom: 0;
+}
+
+/* Testimonials Section */
+.testimonials-section {
+    padding: 80px 0;
+    background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+}
+
+.testimonial-card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.testimonial-content {
+    position: relative;
+}
+
+.quote-icon {
+    font-size: 48px;
+    color: #007bff;
+    opacity: 0.2;
+    position: absolute;
+    top: -20px;
+    left: -10px;
+}
+
+.testimonial-text {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.author-info h4 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.author-info p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.testimonial-pagination {
+    margin-top: 30px;
+}
+
+.testimonial-button-prev,
+.testimonial-button-next {
+    color: #007bff;
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .testimonials-section {
+        padding: 40px 0;
+    }
+    
+    .testimonial-card {
+        padding: 20px;
+    }
 }

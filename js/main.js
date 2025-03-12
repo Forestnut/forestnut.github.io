@@ -31,14 +31,14 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             "line_linked": {
                 "enable": true,
-                "distance": 150,
+                "distance": 120,
                 "color": "#ffffff",
-                "opacity": 0.4,
+                "opacity": 0.3,
                 "width": 1
             },
             "move": {
                 "enable": true,
-                "speed": 2,
+                "speed": 1.5,
                 "direction": "none",
                 "random": false,
                 "straight": false,
@@ -49,13 +49,12 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         "interactivity": {
             "events": {
-                "onhover": { "enable": true, "mode": "grab" },
-                "onclick": { "enable": true, "mode": "push" },
+                "onhover": { "enable": isMobile ? false : true, "mode": "grab" },
+                "onclick": { "enable": false },
                 "resize": true
             },
             "modes": {
-                "grab": { "distance": 140, "line_linked": { "opacity": 1 } },
-                "push": { "particles_nb": 4 }
+                "grab": { "distance": 100, "line_linked": { "opacity": 0.8 } }
             }
         },
         "retina_detect": true
@@ -756,3 +755,59 @@ const imgObserver = new IntersectionObserver((entries, observer) => {
     });
 });
 images.forEach(img => imgObserver.observe(img));
+
+// Dodaj nową sekcję z opiniami studentów
+const testimonialSlider = new Swiper('.testimonial-slider', {
+    slidesPerView: 1,
+    spaceBetween: 30,
+    loop: true,
+    autoplay: {
+        delay: 5000,
+        disableOnInteraction: false
+    },
+    pagination: {
+        el: '.testimonial-pagination',
+        clickable: true,
+        dynamicBullets: true
+    },
+    navigation: {
+        nextEl: '.testimonial-button-next',
+        prevEl: '.testimonial-button-prev'
+    },
+    effect: 'fade',
+    fadeEffect: {
+        crossFade: true
+    },
+    breakpoints: {
+        768: {
+            slidesPerView: 1
+        },
+        1024: {
+            slidesPerView: 1
+        }
+    }
+});
+
+// Animacja dla sekcji testimonials
+gsap.from('.testimonials-section .section-title', {
+    scrollTrigger: {
+        trigger: '.testimonials-section',
+        start: 'top center+=100',
+        toggleActions: 'play none none reverse'
+    },
+    y: 50,
+    opacity: 0,
+    duration: 1
+});
+
+gsap.from('.testimonial-card', {
+    scrollTrigger: {
+        trigger: '.testimonials-section',
+        start: 'top center+=50',
+        toggleActions: 'play none none reverse'
+    },
+    y: 30,
+    opacity: 0,
+    duration: 0.8,
+    stagger: 0.2
+});

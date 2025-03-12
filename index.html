@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Consolas&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="section-indicator">
@@ -167,11 +168,54 @@
 
         <section id="demo" class="section">
             <div class="container px-3">
-                <h2>Sprawdź swoją wiedzę</h2>
-                <div class="quiz-container">
-                    <div id="question"></div>
-                    <div id="answers" class="answers-grid"></div>
-                    <div id="result"></div>
+                <h2>Zaprogramuj drogę do celu!</h2>
+                <div class="game-container">
+                    <div class="game-progress">
+                        <div class="progress-dots">
+                            <span class="progress-dot" data-level="1"></span>
+                            <span class="progress-dot" data-level="2"></span>
+                            <span class="progress-dot" data-level="3"></span>
+                            <span class="progress-dot" data-level="4"></span>
+                            <span class="progress-dot" data-level="5"></span>
+                        </div>
+                        <div class="level-indicator">Level: <span id="current-level">1</span>/5</div>
+                    </div>
+                    <div class="game-stage">
+                        <div class="game-visualization">
+                            <img src="assets/character.png" alt="Character" class="game-character">
+                            <img src="assets/house.png" alt="House" class="game-house">
+                        </div>
+                        <div class="code-options">
+                            <!-- Options will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    <div class="game-message" id="game-message"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials-section" data-aos="fade-up">
+            <div class="container">
+                <h2 class="section-title">Co mówią nasi studenci</h2>
+                <div class="testimonial-slider swiper-container">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide testimonial-card">
+                            <div class="testimonial-content">
+                                <div class="quote-icon">❝</div>
+                                <p class="testimonial-text">Dzięki kursowi znacznie rozwinąłem swoje umiejętności programistyczne. Świetna atmosfera i profesjonalne podejście do nauczania.</p>
+                                <div class="testimonial-author">
+                                    <div class="author-info">
+                                        <h4>Jan Kowalski</h4>
+                                        <p>Frontend Developer</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Dodaj więcej testimoniali według potrzeb -->
+                    </div>
+                    <div class="testimonial-pagination"></div>
+                    <div class="testimonial-button-prev"></div>
+                    <div class="testimonial-button-next"></div>
                 </div>
             </div>
         </section>
@@ -241,5 +285,6 @@
     <script src="js/main.js"></script>
     <script src="js/quiz.js"></script>
     <script src="js/scroll.js"></script>
+    <script src="js/game.js"></script>
 </body>
 </html>
