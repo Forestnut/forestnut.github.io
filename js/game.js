@@ -104,6 +104,41 @@ class Game {
     }
 }
 
+// Navbar scroll behavior
+let lastScrollTop = 0;
+const navbar = document.getElementById('mainNav');
+const navbarHeight = navbar.offsetHeight;
+let isNavbarVisible = true;
+let hideNavbarTimeout;
+
+window.addEventListener('scroll', () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // Show navbar when scrolling up
+    if (scrollTop < lastScrollTop) {
+        if (!isNavbarVisible) {
+            navbar.classList.remove('navbar-hidden');
+            isNavbarVisible = true;
+        }
+        clearTimeout(hideNavbarTimeout);
+        
+        // Hide navbar after 3 seconds of no upward scrolling
+        hideNavbarTimeout = setTimeout(() => {
+            if (scrollTop > navbarHeight) {
+                navbar.classList.add('navbar-hidden');
+                isNavbarVisible = false;
+            }
+        }, 3000);
+    } 
+    // Hide navbar when scrolling down
+    else if (scrollTop > lastScrollTop && scrollTop > navbarHeight) {
+        navbar.classList.add('navbar-hidden');
+        isNavbarVisible = false;
+    }
+    
+    lastScrollTop = scrollTop;
+});
+
 // Inicjalizacja gry po załadowaniu strony
 document.addEventListener('DOMContentLoaded', () => {
     new Game();
