@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -12,20 +13,22 @@
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Consolas&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <div class="section-indicator">
         <div class="section-dot active" data-section="hero" title="Strona główna"></div>
         <div class="section-dot" data-section="profile" title="O kierunku"></div>
         <div class="section-dot" data-section="projects" title="Nasze projekty"></div>
-        <div class="section-dot" data-section="demo" title="Quiz"></div>
+        <div class="section-dot" data-section="game" title="Gra"></div>
         <div class="section-dot" data-section="footer" title="Kontakt"></div>
     </div>
 
     <div class="scroll-container">
-        <nav class="navbar navbar-expand-lg fixed-top navbar-light">
+        <nav class="navbar navbar-expand-lg fixed-top navbar-light p-1">
             <div class="container px-3">
                 <a class="navbar-brand" href="https://zs1.lublin.eu" target="_blank">
-                    <img src="https://zs1.lublin.eu/brepo/panel_repo/2023/09/22/qdaahd/logo2.webp" alt="Logo Zespołu Szkół nr 1 im. Władysława Grabskiego w Lublinie" class="img-fluid">
+                    <img src="https://zs1.lublin.eu/brepo/panel_repo/2023/09/22/qdaahd/logo2.webp"
+                        alt="Logo Zespołu Szkół nr 1 im. Władysława Grabskiego w Lublinie" class="img-fluid">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
@@ -35,7 +38,7 @@
                         <li class="nav-item"><a class="nav-link" href="#hero">Strona główna</a></li>
                         <li class="nav-item"><a class="nav-link" href="#profile">O kierunku</a></li>
                         <li class="nav-item"><a class="nav-link" href="#projects">Nasze projekty</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#demo">Quiz</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#game">Quiz</a></li>
                     </ul>
                 </div>
             </div>
@@ -48,208 +51,218 @@
                 <p class="hero-subtitle">
                     Poznaj świat programowania z nami
                 </p>
-                <a href="#profile" class="cta-button">
+                <a href="#stats" class="cta-button">
                     Poznaj nas bliżej
                 </a>
             </div>
             <div id="hero-background"></div>
         </section>
 
-        <section id="stats" class="section py-5">
-            <div class="container px-4">
-                <!-- Sekcja z opisem i statystykami -->
-                <div class="overview-content mb-5">
-                    <h2 class="text-center mb-4">Technik Programista</h2>
-                    <div class="row justify-content-center">
-                        <div class="col-md-8">
-                            <p class="section-description">
-                                Odkryj fascynujący świat programowania w naszej szkole. Przygotujemy Cię do pracy w jednym z najbardziej 
-                                poszukiwanych zawodów na rynku pracy. Poznaj nowoczesne technologie i zdobądź praktyczne umiejętności.
-                            </p>
-                        </div>
-                    </div>
-        
-                    <div class="row row-cols-2 row-cols-lg-4 g-3 mt-4">
-                        <div class="col">
-                            <div class="stat-item h-100">
-                                <div class="stat-number">100+</div>
-                                <div class="stat-label">Absolwentów</div>
+        <section id="stats" class="section py-4">
+            <div class="container h-100">
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="overview-content">
+                            <h2 class="text-center mb-4">Technik Programista</h2>
+                            <div class="row justify-content-center">
+                                <div class="col-md-8">
+                                    <p class="section-description">
+                                        Odkryj fascynujący świat programowania w naszej szkole. Przygotujemy Cię do pracy w
+                                        jednym z najbardziej
+                                        poszukiwanych zawodów na rynku pracy. Poznaj nowoczesne technologie i zdobądź praktyczne
+                                        umiejętności.
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col">
-                            <div class="stat-item h-100">
-                                <div class="stat-number">8</div>
-                                <div class="stat-label">Języków programowania</div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="stat-item h-100">
-                                <div class="stat-number">95%</div>
-                                <div class="stat-label">Zdawalność egzaminów</div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="stat-item h-100">
-                                <div class="stat-number">50+</div>
-                                <div class="stat-label">Projektów uczniowskich</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        </section>
 
-        <section id="technologies" class="section py-5">
-                <!-- Sekcja z technologiami -->
-                <div class="technologies-content mt-5">
-                    <h3 class="text-center mb-4">Poznasz technologie</h3>
-                    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
-                        <div class="col">
-                            <div class="tech-item h-100">
-                                <i class="fab fa-html5"></i>
-                                <h3>HTML5</h3>
-                                <p>Tworzenie struktury stron internetowych i aplikacji webowych</p>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="tech-item h-100">
-                                <i class="fab fa-js"></i>
-                                <h3>JavaScript</h3>
-                                <p>Programowanie interaktywnych elementów i aplikacji front-end</p>
-                            </div>
-                        </div>
-                        
-                        <div class="col">
-                            <div class="tech-item h-100">
-                                <i class="fab fa-css3"></i>
-                                <h3>CSS</h3>
-                                <p>Stylizacja stron internetowych i aplikacji webowych</p>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="tech-item h-100">
-                                <i class="fab fa-react"></i>
-                                <h3>React</h3>
-                                <p>Tworzenie interaktywnych aplikacji webowych</p>
-                            </div>
-                        </div>
-
-
-                        <div class="col">
-                            <div class="tech-item h-100">
-                                <i class="fab fa-php"></i>
-                                <h3>PHP</h3>
-                                <p>Tworzenie dynamicznych aplikacji back-end</p>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="tech-item h-100">
-                                <i class="fab fa-python"></i>
-                                <h3>Python</h3>
-                                <p>Programowanie aplikacji, analiza danych i sztuczna inteligencja</p>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="tech-item h-100">
-                                <i class="fas fa-database"></i>
-                                <h3>SQL</h3>
-                                <p>Projektowanie i zarządzanie bazami danych</p>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="tech-item h-100">
-                                <i class="fab fa-java"></i>
-                                <h3>Java</h3>
-                                <p>Tworzenie aplikacji desktopowych i mobilnych</p>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="tech-item h-100">
-                                <i class="fab fa-git-alt"></i>
-                                <h3>Git</h3>
-                                <p>Kontrola wersji i praca zespołowa nad projektami</p>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="tech-item h-100">
-                                <i class="fab fa-hashtag"></i>
-                                <h3>C#</h3>
-                                <p></p>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="tech-item h-100">
-                                <i class="fab fa-android"></i>
-                                <h3>Aplikacje mobilne</h3>
-                                <p></p>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="tech-item h-100">
-                                <i class="fab fa-cuttlefish"></i>
-                                <h3>C++</h3>
-                                <p></p>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="tech-item h-100">
-                                <i class="fab fa-flas-vial"></i>
-                                <h3>C++</h3>
-                                <p></p>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="projects" class="section py-5 bg-light">
-            <div class="container px-3">
-                <div class="projects-header">
-                    <h2>Nasze Projekty</h2>
-                    <p>Zobacz, co tworzą nasi uczniowie</p>
-                </div>
-                <div class="swiper project-slider">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <div class="project-card">
-                                <img src="https://picsum.photos/800/600" alt="Project 1" class="img-fluid">
-                                <div class="content">
-                                    <h4>Aplikacja Mobilna</h4>
-                                    <p>Innowacyjne rozwiązanie dla uczniów naszej szkoły.</p>
-                                    <div class="tech-tags">
-                                        <span class="badge bg-primary">Flutter</span>
-                                        <span class="badge bg-secondary">Firebase</span>
+                            <div class="row row-cols-2 row-cols-lg-4 g-3">
+                                <div class="col">
+                                    <div class="stat-item h-100">
+                                        <div class="stat-number">100+</div>
+                                        <div class="stat-label">Absolwentów</div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="stat-item h-100">
+                                        <div class="stat-number">8</div>
+                                        <div class="stat-label">Języków programowania</div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="stat-item h-100">
+                                        <div class="stat-number">95%</div>
+                                        <div class="stat-label">Zdawalność egzaminów</div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="stat-item h-100">
+                                        <div class="stat-number">50+</div>
+                                        <div class="stat-label">Projektów uczniowskich</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="swiper-slide">
-                            <div class="project-card">
-                                <img src="https://picsum.photos/801/600" alt="Project 2" class="img-fluid">
-                                <div class="p-4">
-                                    <h4>Strona Internetowa</h4>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                    <div class="swiper-pagination"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
                 </div>
             </div>
         </section>
 
-        <section id="demo" class="section py-5">
+        <section id="technologies" class="section py-5">
+    <div class="container">
+        <h3 class="text-center mb-4">Poznasz technologie</h3>
+        <div class="tech-slider">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <!-- HTML -->
+                    <div class="swiper-slide">
+                        <div class="tech-card">
+                            <i class="fab fa-html5"></i>
+                            <h3>HTML5</h3>
+                            <p>Tworzenie struktury stron internetowych</p>
+                        </div>
+                    </div>
+                    <!-- JavaScript -->
+                    <div class="swiper-slide">
+                        <div class="tech-card">
+                            <i class="fab fa-js"></i>
+                            <h3>JavaScript</h3>
+                            <p>Programowanie front-end</p>
+                        </div>
+                    </div>
+                    <!-- CSS -->
+                    <div class="swiper-slide">
+                        <div class="tech-card">
+                            <i class="fab fa-css3"></i>
+                            <h3>CSS</h3>
+                            <p>Stylizacja stron internetowych</p>
+                        </div>
+                    </div>
+                    <!-- React -->
+                    <div class="swiper-slide">
+                        <div class="tech-card">
+                            <i class="fab fa-react"></i>
+                            <h3>React</h3>
+                            <p>Tworzenie aplikacji webowych</p>
+                        </div>
+                    </div>
+                    <!-- PHP -->
+                    <div class="swiper-slide">
+                        <div class="tech-card">
+                            <i class="fab fa-php"></i>
+                            <h3>PHP</h3>
+                            <p>Aplikacje back-end</p>
+                        </div>
+                    </div>
+                    <!-- Python -->
+                    <div class="swiper-slide">
+                        <div class="tech-card">
+                            <i class="fab fa-python"></i>
+                            <h3>Python</h3>
+                            <p>Analiza danych i AI</p>
+                        </div>
+                    </div>
+                    <!-- SQL -->
+                    <div class="swiper-slide">
+                        <div class="tech-card">
+                            <i class="fas fa-database"></i>
+                            <h3>SQL</h3>
+                            <p>Bazy danych</p>
+                        </div>
+                    </div>
+                    <!-- Java -->
+                    <div class="swiper-slide">
+                        <div class="tech-card">
+                            <i class="fab fa-java"></i>
+                            <h3>Java</h3>
+                            <p>Aplikacje desktopowe i mobilne</p>
+                        </div>
+                    </div>
+                    <!-- Git -->
+                    <div class="swiper-slide">
+                        <div class="tech-card">
+                            <i class="fab fa-git-alt"></i>
+                            <h3>Git</h3>
+                            <p>Kontrola wersji</p>
+                        </div>
+                    </div>
+                    <!-- C# -->
+                    <div class="swiper-slide">
+                        <div class="tech-card">
+                            <i class="fab fa-microsoft"></i>
+                            <h3>C#</h3>
+                            <p>.NET i aplikacje Windows</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="projects" class="section py-5 bg-light">
+    <div class="container px-3">
+        <div class="projects-header">
+            <h2>Nasze Projekty</h2>
+            <p>Zobacz, co tworzą nasi uczniowie</p>
+        </div>
+        <div class="swiper project-slider">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="project-card">
+                        <div class="video-container">
+                            <video class="project-video" muted loop autoplay playsinline 
+                                   data-object-fit="cover" preload="auto" defaultMuted>
+                                <source src="assets/videos/example.mp4" type="video/mp4">
+                                Twoja przeglądarka nie obsługuje odtwarzacza video.
+                            </video>
+                            <button class="fullscreen-btn">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                        <div class="content">
+                            <h4>GRAbski</h4>
+                            <p>Pikselowa gra fabularna z rozgrywką w naszej szkole!</p>
+                            <div class="tech-tags">
+                                <span class="badge bg-danger">HTML Canvas</span>
+                                <span class="badge bg-warning">JS / jQuery</span>
+                                <span class="badge bg-primary">CSS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="project-card">
+                        <div class="video-container">
+                            <video class="project-video" muted loop autoplay playsinline 
+                                   data-object-fit="cover" preload="auto" defaultMuted>
+                                <source src="assets/website-project.mp4" type="video/mp4">
+                                Twoja przeglądarka nie obsługuje odtwarzacza video.
+                            </video>
+                            <button class="fullscreen-btn">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                        <div class="content">
+                            <h4>Portfolio</h4>
+                            <p>Nowoczesna strona internetowa z animacjami</p>
+                            <div class="tech-tags">
+                                <span class="badge bg-info">React</span>
+                                <span class="badge bg-success">GSAP</span>
+                                <span class="badge bg-primary">Tailwind</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+    </div>
+</section>
+
+        <section id="game" class="section py-5">
             <div class="container px-3">
                 <h2>Zaprogramuj drogę do celu!</h2>
                 <div class="game-container">
@@ -261,12 +274,12 @@
                             <span class="progress-dot" data-level="4"></span>
                             <span class="progress-dot" data-level="5"></span>
                         </div>
-                        <div class="level-indicator">Level: <span id="current-level">1</span>/5</div>
+                        <div class="level-indicator">Poziom: <span id="current-level">1</span>/5</div>
                     </div>
                     <div class="game-stage">
                         <div class="game-visualization">
-                            <img src="assets/character.png" alt="Character" class="game-character">
-                            <img src="assets/house.png" alt="House" class="game-house">
+                            <div class="game-character"></div>
+                            <div class="game-house"></div>
                         </div>
                         <div class="code-options">
                             <!-- Options will be populated by JavaScript -->
@@ -277,7 +290,7 @@
             </div>
         </section>
 
-    </div> 
+    </div>
 
     <footer class="footer">
         <div class="footer-preview">
@@ -312,17 +325,23 @@
                     <div class="col-lg-4 col-md-6">
                         <h3>Social Media</h3>
                         <div class="social-links">
-                            <a href="https://zs1.lublin.eu/" target="_blank"><i class="fas fa-school"></i>Strona Szkoły</a>
-                            <a href="https://facebook.com/profile.php?id=100063591939187" target="_blank"><i class="fab fa-facebook-f"></i>Facebook</a>
-                            <a href="https://www.instagram.com/zs1.lublin" target="_blank"><i class="fab fa-instagram"></i>Instagram</a>
-                            <a href="https://www.instagram.com/samorzad.zs1/" target="_blank"><i class="fab fa-instagram"></i>Instagram Samrządu Uczniowskiego</a>
-                            <a href="https://youtube.com/@podwale11" target="_blank"><i class="fab fa-youtube"></i>Youtube</a>
+                            <a href="https://zs1.lublin.eu/" target="_blank"><i class="fas fa-school"></i>Strona
+                                Szkoły</a>
+                            <a href="https://facebook.com/profile.php?id=100063591939187" target="_blank"><i
+                                    class="fab fa-facebook-f"></i>Facebook</a>
+                            <a href="https://www.instagram.com/zs1.lublin" target="_blank"><i
+                                    class="fab fa-instagram"></i>Instagram</a>
+                            <a href="https://www.instagram.com/samorzad.zs1/" target="_blank"><i
+                                    class="fab fa-instagram"></i>Instagram Samrządu Uczniowskiego</a>
+                            <a href="https://youtube.com/@podwale11" target="_blank"><i
+                                    class="fab fa-youtube"></i>Youtube</a>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <h3>Zapraszamy</h3>
                         <p><i class="far fa-clock me-2"></i>Stoisko czynne: 8:00 - 15:00</p>
-                        <p>Zapraszamy do odwiedzenia naszego stoiska i zapoznania się z ofertą kierunku Technika Programista!</p>
+                        <p>Zapraszamy do odwiedzenia naszego stoiska i zapoznania się z ofertą kierunku Technika
+                            Programista!</p>
                     </div>
                 </div>
                 <div class="footer-bottom">
@@ -345,4 +364,5 @@
     <script src="js/scroll.js"></script>
     <script src="js/game.js"></script>
 </body>
+
 </html>

@@ -1,9 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const sections = ['hero', 'stats', 'technologies', 'projects', 'demo'];
+    const sections = ['hero', 'stats', 'technologies', 'projects', 'game'];
     const sectionElements = sections.map(id => document.getElementById(id));
     const sectionDots = document.querySelector('.section-indicator');
     let isScrolling = false;
     let currentSection = 0;
+    let lastWheelTime = Date.now();
+    const wheelDelay = 1000; // Minimalny czas między scrollowaniami (1 sekunda)
 
     // Create dots
     sectionDots.innerHTML = sections.map((section, index) => `
@@ -12,188 +14,151 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const navDots = document.querySelectorAll('.section-dot');
 
-    // Intersection Observer to track which section is currently visible
-    const observer = new IntersectionObserver((entries) => {
-        if (isScrolling) return;
+    function updateDots(index) {
+        navDots.forEach(dot => dot.classList.remove('active'));
+        navDots[index]?.classList.add('active');
+    }
+
+    // Uproszczona funkcja scrollowania
+    function scrollToSection(index) {
+        if (isScrolling || index === currentSection) return;
         
+        isScrolling = true;
+        currentSection = index;
+        
+        const targetSection = sectionElements[index];
+        if (targetSection) {
+            const isMobile = window.innerWidth <= 768;
+            const duration = isMobile ? 700 : 1000;
+            
+            targetSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+            updateDots(index);
+            
+            // Dostosuj czas blokady scrollowania dla mobile
+            setTimeout(() => {
+                isScrolling = false;
+            }, duration + 1000);
+        }
+    }
+
+    // Handle dot clicks
+    navDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => scrollToSection(index));
+    });
+
+    // Zmodyfikowany Observer z obsługą nawbara
+    const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const index = sections.indexOf(entry.target.id);
                 if (index !== -1) {
                     currentSection = index;
                     updateDots(index);
+                    
+                    // Obsługa widoczności nawbara
+                    const navbar = document.querySelector('.navbar');
+                    if (entry.target.id === 'hero') {
+                        navbar.style.transform = 'translateY(0)';
+                    } else {
+                        navbar.style.transform = 'translateY(-100%)';
+                    }
                 }
             }
         });
-    }, {
-        threshold: 0.5
-    });
+    }, { threshold: 0.2 }); // Zmniejszone z 0.5 na 0.2
 
-    // Observe all sections
-    sectionElements.forEach(section => observer.observe(section));
-
-    function updateDots(index) {
-        navDots.forEach(dot => dot.classList.remove('active'));
-        navDots[index].classList.add('active');
-    }
-
-    function scrollToSection(index) {
-        if (isScrolling) return;
-        
-        isScrolling = true;
-        currentSection = index;
-
-        const duration = isMobile ? 700 : 1000; // Shorter duration on mobile
-
-        sectionElements[index].scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
-
-        updateDots(index);
-        
-        // Adjust timeout for mobile
-        setTimeout(() => {
-            isScrolling = false;
-        }, duration + 100);
-    }
-
-    // Handle mouse wheel
-    window.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        
-        if (isScrolling) return;
-
-        const direction = e.deltaY > 0 ? 1 : -1;
-        const targetSection = Math.min(Math.max(currentSection + direction, 0), sections.length - 1);
-        
-        if (targetSection !== currentSection) {
-            scrollToSection(targetSection);
+    sectionElements.forEach(section => {
+        if (section) {
+            observer.observe(section);
         }
-    }, { passive: false });
+    });
 
     // Handle keyboard navigation
     document.addEventListener('keydown', (e) => {
-        if (isScrolling) return;
-
-        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-            const nextSection = Math.min(currentSection + 1, sections.length - 1);
-            if (nextSection !== currentSection) {
-                scrollToSection(nextSection);
+        if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+            e.preventDefault();
+            if (currentSection < sections.length - 1) {
+                scrollToSection(currentSection + 1);
             }
-        } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-            const nextSection = Math.max(currentSection - 1, 0);
-            if (nextSection !== currentSection) {
-                scrollToSection(nextSection);
+        } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+            e.preventDefault();
+            if (currentSection > 0) {
+                scrollToSection(currentSection - 1);
             }
         }
     });
 
-    // Handle dot clicks
-    navDots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            if (currentSection !== index) {
-                scrollToSection(index);
-            }
-        });
-    });
+    // Poprawiona obsługa wheel
+    let wheelTimeout;
+    window.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        
+        if (isScrolling || wheelTimeout) {
+            return;
+        }
+        
+        const direction = Math.sign(e.deltaY);
+        
+        if (direction > 0 && currentSection < sections.length - 1) {
+            scrollToSection(currentSection + 1);
+        } else if (direction < 0 && currentSection > 0) {
+            scrollToSection(currentSection - 1);
+        }
 
-    // Initialize with first section
-    updateDots(0);
+        wheelTimeout = setTimeout(() => {
+            wheelTimeout = null;
+        }, 1500);
+    }, { passive: false });
 
-    // Touch handling variables
+    // Dodanie zmiennych dla obsługi dotyku
     let touchStartY = 0;
     let touchEndY = 0;
     let touchStartTime = 0;
-    const minSwipeDistance = 50; // Minimalna odległość przesunięcia
-    const maxSwipeTime = 300; // Maksymalny czas przesunięcia (ms)
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const minSwipeDistance = 50;
+    const maxSwipeTime = 300;
+    const touchDelay = 500;
+    let lastTouchTime = 0;
 
-    // Touch event handlers
+    // Obsługa dotyku
     document.addEventListener('touchstart', (e) => {
-        if (isScrolling) return;
-        
         touchStartY = e.touches[0].clientY;
         touchStartTime = Date.now();
     }, { passive: true });
 
     document.addEventListener('touchmove', (e) => {
-        if (isScrolling) {
-            e.preventDefault();
-        }
+        // Zapobiegaj domyślnemu scrollowaniu
+        e.preventDefault();
     }, { passive: false });
 
     document.addEventListener('touchend', (e) => {
-        if (isScrolling) return;
-        
         touchEndY = e.changedTouches[0].clientY;
         const touchEndTime = Date.now();
-        const swipeDistance = touchEndY - touchStartY;
-        const swipeTime = touchEndTime - touchStartTime;
+        const touchDuration = touchEndTime - touchStartTime;
+        const currentTime = Date.now();
 
-        // Sprawdź czy gest był wystarczająco szybki i długi
-        if (Math.abs(swipeDistance) >= minSwipeDistance && swipeTime <= maxSwipeTime) {
-            const direction = swipeDistance > 0 ? -1 : 1;
-            const targetSection = Math.min(Math.max(currentSection + direction, 0), sections.length - 1);
-            
-            if (targetSection !== currentSection) {
-                scrollToSection(targetSection);
+        // Sprawdź czy minął wystarczający czas od ostatniego dotknięcia
+        if (currentTime - lastTouchTime < touchDelay) {
+            return;
+        }
+
+        // Oblicz odległość i kierunek przesunięcia
+        const swipeDistance = touchStartY - touchEndY;
+        const isValidSwipe = Math.abs(swipeDistance) > minSwipeDistance && touchDuration < maxSwipeTime;
+
+        if (isValidSwipe && !isScrolling) {
+            if (swipeDistance > 0 && currentSection < sections.length - 1) {
+                scrollToSection(currentSection + 1);
+            } else if (swipeDistance < 0 && currentSection > 0) {
+                scrollToSection(currentSection - 1);
             }
+            lastTouchTime = currentTime;
         }
     }, { passive: true });
 
-    // Add touch feedback for dots
-    if (isMobile) {
-        navDots.forEach(dot => {
-            dot.addEventListener('touchstart', () => {
-                dot.style.transform = 'scale(1.2)';
-            });
-            
-            dot.addEventListener('touchend', () => {
-                dot.style.transform = '';
-            });
-        });
-    }
-
-    // Navbar visibility handling
-    let lastScrollY = window.scrollY;
-    let scrollDirection = 'up';
-    let ticking = false;
-    
-    function handleNavbarVisibility() {
-        if (window.innerWidth > 768) return; // Only for mobile
-        
-        const currentScrollY = window.scrollY;
-        const navbar = document.querySelector('.navbar');
-        
-        // Determine scroll direction
-        scrollDirection = currentScrollY > lastScrollY ? 'down' : 'up';
-        
-        // Show/hide navbar based on scroll direction and position
-        if (scrollDirection === 'down' && currentScrollY > 100) {
-            navbar.classList.add('hidden');
-        } else {
-            navbar.classList.remove('hidden');
-        }
-        
-        lastScrollY = currentScrollY;
-        ticking = false;
-    }
-    
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            window.requestAnimationFrame(() => {
-                handleNavbarVisibility();
-                ticking = false;
-            });
-            ticking = true;
-        }
-    }, { passive: true });
-    
-    // Show navbar when touching top of screen
-    document.addEventListener('touchstart', (e) => {
-        if (e.touches[0].clientY < 50) {
-            document.querySelector('.navbar').classList.remove('hidden');
-        }
-    }, { passive: true });
+    // Initialize
+    window.scrollTo(0, 0);
+    updateDots(0);
 });

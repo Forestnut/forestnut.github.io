@@ -7,24 +7,37 @@ const gameLevels = [
             "character.move(100)",
             "character.left += 100"
         ],
-        correctAnswer: 1
+        correctAnswer: 1,
+        movement: 100
     },
     {
-        question: "Jak zmienić kolor postaci na niebieski?",
+        question: "Jak przesunąć postać o kolejne 150px?",
         options: [
-            "character.color = 'blue'",
-            "character.style.backgroundColor = 'blue'",
-            "character.setColor('blue')",
-            "character.fill = 'blue'"
+            "character.right = '150px'",
+            "character.style.transform = 'translateX(250px)'",
+            "character.style.marginLeft = '150px'",
+            "character.position = 150"
         ],
-        correctAnswer: 1
+        correctAnswer: 1,
+        movement: 150
     },
-    // Dodaj więcej poziomów tutaj...
+    {
+        question: "Final: Jak dotrzeć do celu?",
+        options: [
+            "character.style.right = '0'",
+            "character.style.transform = 'translateX(400px)'",
+            "character.moveToEnd()",
+            "character.style.left = 'auto'"
+        ],
+        correctAnswer: 1,
+        movement: 200
+    }
 ];
 
 class Game {
     constructor() {
         this.currentLevel = 0;
+        this.totalMovement = 0;
         this.character = document.querySelector('.game-character');
         this.optionsContainer = document.querySelector('.code-options');
         this.messageElement = document.getElementById('game-message');
@@ -35,6 +48,9 @@ class Game {
     }
 
     initGame() {
+        // Reset character position
+        this.totalMovement = 0;
+        this.character.style.transform = 'translateX(0)';
         this.loadLevel(this.currentLevel);
         this.updateProgress();
     }
@@ -50,16 +66,21 @@ class Game {
             button.addEventListener('click', () => this.checkAnswer(index));
             this.optionsContainer.appendChild(button);
         });
-
-        // Reset character position
-        this.character.style.transform = 'translateX(0)';
     }
 
     checkAnswer(selectedIndex) {
         const level = gameLevels[this.currentLevel];
+        const buttons = document.querySelectorAll('.code-option');
+        
+        buttons.forEach(button => {
+            button.disabled = true;
+            button.style.pointerEvents = 'none';
+        });
         
         if (selectedIndex === level.correctAnswer) {
             this.showMessage('Świetnie! Prawidłowa odpowiedź!', 'success');
+            buttons[selectedIndex].classList.add('correct');
+            this.totalMovement += level.movement;
             this.animateCharacter();
             this.markProgress(this.currentLevel);
             
@@ -74,16 +95,25 @@ class Game {
             }, 1500);
         } else {
             this.showMessage('Spróbuj jeszcze raz!', 'error');
+            buttons[selectedIndex].classList.add('wrong');
+            
+            setTimeout(() => {
+                buttons.forEach(button => {
+                    button.disabled = false;
+                    button.style.pointerEvents = 'auto';
+                    button.classList.remove('wrong');
+                });
+            }, 1500);
         }
     }
 
     animateCharacter() {
-        this.character.style.transform = 'translateX(200px)';
+        this.character.style.transform = `translateX(${this.totalMovement}px)`;
     }
 
     showMessage(text, type) {
         this.messageElement.textContent = text;
-        this.messageElement.className = `game-message show ${type}`;
+        this.messageElement.className = `game-message ${type} show`;
         setTimeout(() => {
             this.messageElement.classList.remove('show');
         }, 2000);
@@ -98,48 +128,17 @@ class Game {
     }
 
     showGameComplete() {
-        this.optionsContainer.innerHTML = '';
-        this.showMessage('Gratulacje! Ukończyłeś wszystkie poziomy!', 'success');
-        // Możesz dodać tutaj dodatkowe efekty lub akcje po ukończeniu gry
+        this.optionsContainer.innerHTML = `
+            <div class="game-complete">
+                <h3>Gratulacje! Ukończyłeś wszystkie poziomy!</h3>
+                <button onclick="new Game()" class="restart-button">Zagraj ponownie</button>
+            </div>
+        `;
+        this.showMessage('Brawo! Dotarłeś do celu!', 'success');
     }
 }
 
-// Navbar scroll behavior
-let lastScrollTop = 0;
-const navbar = document.getElementById('mainNav');
-const navbarHeight = navbar.offsetHeight;
-let isNavbarVisible = true;
-let hideNavbarTimeout;
-
-window.addEventListener('scroll', () => {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    
-    // Show navbar when scrolling up
-    if (scrollTop < lastScrollTop) {
-        if (!isNavbarVisible) {
-            navbar.classList.remove('navbar-hidden');
-            isNavbarVisible = true;
-        }
-        clearTimeout(hideNavbarTimeout);
-        
-        // Hide navbar after 3 seconds of no upward scrolling
-        hideNavbarTimeout = setTimeout(() => {
-            if (scrollTop > navbarHeight) {
-                navbar.classList.add('navbar-hidden');
-                isNavbarVisible = false;
-            }
-        }, 3000);
-    } 
-    // Hide navbar when scrolling down
-    else if (scrollTop > lastScrollTop && scrollTop > navbarHeight) {
-        navbar.classList.add('navbar-hidden');
-        isNavbarVisible = false;
-    }
-    
-    lastScrollTop = scrollTop;
-});
-
-// Inicjalizacja gry po załadowaniu strony
+// Initialize game when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new Game();
 });

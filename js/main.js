@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tsParticles.load("hero-particles", {
         "particles": {
             "number": {
-                "value": 80,
+                "value": 100,
                 "density": {
                     "enable": true,
                     "value_area": 800
@@ -25,13 +25,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 "anim": { "enable": false }
             },
             "size": {
-                "value": 3,
+                "value": 4,
                 "random": true,
                 "anim": { "enable": false }
             },
             "line_linked": {
                 "enable": true,
-                "distance": 120,
+                "distance": 140,
                 "color": "#ffffff",
                 "opacity": 0.3,
                 "width": 1
@@ -85,14 +85,81 @@ gsap.to("#hero-background", {
     y: isMobile ? 100 : 200
 });
 
+// Zaktualizowana funkcja handleVideoControls
+function handleVideoControls() {
+    const containers = document.querySelectorAll('.video-container');
+    
+    containers.forEach(container => {
+        const video = container.querySelector('video');
+        const fullscreenBtn = container.querySelector('.fullscreen-btn');
+        
+        // Upewnij się, że video jest wyciszone
+        video.muted = true;
+        
+        // Automatyczne odtwarzanie
+        video.play().catch(error => {
+            console.log('Video autoplay was prevented:', error);
+        });
+
+        // Obsługa fullscreen
+        if (fullscreenBtn) {
+            fullscreenBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Zatrzymaj propagację, aby uniknąć konfliktu z innymi handlerami
+                if (e.stopPropagation) e.stopPropagation();
+                
+                try {
+                    if (video.requestFullscreen) {
+                        video.requestFullscreen();
+                    } else if (video.webkitRequestFullscreen) {
+                        video.webkitRequestFullscreen();
+                    } else if (video.mozRequestFullScreen) {
+                        video.mozRequestFullScreen();
+                    } else if (video.msRequestFullscreen) {
+                        video.msRequestFullscreen();
+                    }
+                } catch (err) {
+                    console.log('Fullscreen failed:', err);
+                }
+            });
+        }
+
+        // Obsługa zmiany stanu fullscreen
+        const fullscreenChanged = () => {
+            const isFullscreen = document.fullscreenElement === video ||
+                               document.webkitFullscreenElement === video ||
+                               document.mozFullScreenElement === video ||
+                               document.msFullscreenElement === video;
+
+            if (isFullscreen) {
+                video.play().catch(console.log);
+            }
+        };
+
+        // Nasłuchuj zmiany stanu fullscreen
+        document.addEventListener('fullscreenchange', fullscreenChanged);
+        document.addEventListener('webkitfullscreenchange', fullscreenChanged);
+        document.addEventListener('mozfullscreenchange', fullscreenChanged);
+        document.addEventListener('MSFullscreenChange', fullscreenChanged);
+    });
+}
+
+// Wywołaj funkcję po załadowaniu DOM
+document.addEventListener('DOMContentLoaded', handleVideoControls);
+
 // Update Swiper configuration for better mobile experience
 const projectSlider = new Swiper('.project-slider', {
     slidesPerView: 1,
-    spaceBetween: 20,
+    spaceBetween: 30,
     loop: true,
+    loopAdditionalSlides: 2, // Ensure proper looping
+    grabCursor: true,
     autoplay: {
         delay: 3000,
-        disableOnInteraction: false
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true
     },
     pagination: {
         el: '.swiper-pagination',
@@ -104,20 +171,119 @@ const projectSlider = new Swiper('.project-slider', {
         prevEl: '.swiper-button-prev'
     },
     breakpoints: {
-        480: {
-            slidesPerView: 1,
-            spaceBetween: 20
-        },
         768: {
             slidesPerView: 2,
-            spaceBetween: 25
-        },
-        1024: {
-            slidesPerView: 3,
             spaceBetween: 30
+        },
+        1200: {
+            slidesPerView: 2,
+            spaceBetween: 40
+        }
+    },
+    on: {
+        init: function () {
+            handleVideoControls();
+            this.slides.forEach(slide => {
+                const video = slide.querySelector('video');
+                if (video) {
+                    if (slide.classList.contains('swiper-slide-active')) {
+                        video.play().catch(() => {
+                            console.log('Auto-play was prevented. Video will start on user interaction.');
+                        });
+                    } else {
+                        video.pause();
+                    }
+                }
+            });
+        },
+        slideChange: function () {
+            const videos = document.querySelectorAll('.project-video');
+            videos.forEach(video => {
+                const slide = video.closest('.swiper-slide');
+                if (slide.classList.contains('swiper-slide-active')) {
+                    video.play().catch(() => {
+                        console.log('Video play prevented on slide change');
+                    });
+                } else {
+                    video.pause();
+                    video.currentTime = 0;
+                }
+            });
         }
     }
 });
+
+// Pause videos when slider is not in viewport
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        const videos = entry.target.querySelectorAll('video');
+        videos.forEach(video => {
+            if (entry.isIntersecting) {
+                if (video.closest('.swiper-slide-active')) {
+                    video.play();
+                }
+            } else {
+                video.pause();
+            }
+        });
+    });
+}, { threshold: 0.5 });
+
+observer.observe(document.querySelector('.project-slider'));
+
+// Initialize technology slider
+const techSlider = new Swiper('.tech-slider .swiper-container', {
+    effect: 'coverflow',
+    grabCursor: true,
+    centeredSlides: true,
+    slidesPerView: 'auto',
+    initialSlide: 2,
+    loop: true,
+    speed: 800, // Szybsza animacja przejścia
+    autoplay: {
+        delay: 2000, // Szybsza zmiana slajdów (2 sekundy)
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+        waitForTransition: true
+    },
+    coverflowEffect: {
+        rotate: 0,
+        stretch: 0,
+        depth: 100,
+        modifier: 2,
+        slideShadows: false,
+    },
+    pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+        dynamicBullets: true,
+    },
+    breakpoints: {
+        320: {
+            slidesPerView: 1,
+            spaceBetween: 20
+        },
+        640: {
+            slidesPerView: 2,
+            spaceBetween: 30
+        },
+        992: {
+            slidesPerView: 3,
+            spaceBetween: 40
+        }
+    }
+});
+
+// Add hover pause functionality
+const techSliderContainer = document.querySelector('.tech-slider');
+if (techSliderContainer) {
+    techSliderContainer.addEventListener('mouseenter', () => {
+        techSlider.autoplay.stop();
+    });
+    techSliderContainer.addEventListener('mouseleave', () => {
+        techSlider.autoplay.start();
+    });
+}
 
 // Optymalizacja animacji statystyk dla mobile
 const stats = [
@@ -810,4 +976,48 @@ gsap.from('.testimonial-card', {
     opacity: 0,
     duration: 0.8,
     stagger: 0.2
+});
+
+// Update section heights based on content
+function updateSectionHeights() {
+    document.querySelectorAll('.section').forEach(section => {
+        const content = section.querySelector('.container');
+        if (content) {
+            const contentHeight = content.offsetHeight;
+            const windowHeight = window.innerHeight;
+            section.style.minHeight = contentHeight > windowHeight ? 'auto' : '100vh';
+        }
+    });
+}
+
+// Call on load and resize
+window.addEventListener('load', updateSectionHeights);
+window.addEventListener('resize', updateSectionHeights);
+
+// Optimize mobile performance
+if (isMobile) {
+    document.querySelectorAll('.section').forEach(section => {
+        section.style.height = 'auto';
+        section.style.minHeight = 'auto';
+    });
+}
+
+// Dodaj obserwator widoczności dla kontenerów video
+const videoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        const video = entry.target.querySelector('video');
+        if (video) {
+            if (entry.isIntersecting) {
+                video.play().catch(() => {
+                    console.log('Video play prevented by visibility observer');
+                });
+            } else {
+                video.pause();
+            }
+        }
+    });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.video-container').forEach(container => {
+    videoObserver.observe(container);
 });
