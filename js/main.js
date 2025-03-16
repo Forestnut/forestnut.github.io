@@ -93,56 +93,40 @@ function handleVideoControls() {
         const video = container.querySelector('video');
         const fullscreenBtn = container.querySelector('.fullscreen-btn');
         
-        // Upewnij się, że video jest wyciszone
-        video.muted = true;
-        
-        // Automatyczne odtwarzanie
-        video.play().catch(error => {
-            console.log('Video autoplay was prevented:', error);
-        });
-
-        // Obsługa fullscreen
-        if (fullscreenBtn) {
-            fullscreenBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                // Zatrzymaj propagację, aby uniknąć konfliktu z innymi handlerami
-                if (e.stopPropagation) e.stopPropagation();
-                
-                try {
-                    if (video.requestFullscreen) {
-                        video.requestFullscreen();
-                    } else if (video.webkitRequestFullscreen) {
-                        video.webkitRequestFullscreen();
-                    } else if (video.mozRequestFullScreen) {
-                        video.mozRequestFullScreen();
-                    } else if (video.msRequestFullscreen) {
-                        video.msRequestFullscreen();
+        if (video) {
+            // Set initial state
+            video.muted = true;
+            
+            // Only try to autoplay if video is in viewport
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && video.paused) {
+                        video.play().catch(() => {
+                            console.log('Autoplay prevented, waiting for user interaction');
+                        });
+                    } else {
+                        video.pause();
                     }
-                } catch (err) {
-                    console.log('Fullscreen failed:', err);
-                }
-            });
-        }
+                });
+            }, { threshold: 0.5 });
+            
+            observer.observe(container);
 
-        // Obsługa zmiany stanu fullscreen
-        const fullscreenChanged = () => {
-            const isFullscreen = document.fullscreenElement === video ||
-                               document.webkitFullscreenElement === video ||
-                               document.mozFullScreenElement === video ||
-                               document.msFullscreenElement === video;
-
-            if (isFullscreen) {
-                video.play().catch(console.log);
+            // Handle fullscreen on click
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Request fullscreen only on user interaction
+                    if (document.fullscreenEnabled) {
+                        video.requestFullscreen().catch((err) => {
+                            console.log('Fullscreen failed:', err);
+                        });
+                    }
+                });
             }
-        };
-
-        // Nasłuchuj zmiany stanu fullscreen
-        document.addEventListener('fullscreenchange', fullscreenChanged);
-        document.addEventListener('webkitfullscreenchange', fullscreenChanged);
-        document.addEventListener('mozfullscreenchange', fullscreenChanged);
-        document.addEventListener('MSFullscreenChange', fullscreenChanged);
+        }
     });
 }
 
@@ -186,12 +170,9 @@ const projectSlider = new Swiper('.project-slider', {
             this.slides.forEach(slide => {
                 const video = slide.querySelector('video');
                 if (video) {
+                    video.muted = true; // Ensure video is muted
                     if (slide.classList.contains('swiper-slide-active')) {
-                        video.play().catch(() => {
-                            console.log('Auto-play was prevented. Video will start on user interaction.');
-                        });
-                    } else {
-                        video.pause();
+                        video.play().catch(() => {}); // Silently handle autoplay rejection
                     }
                 }
             });
@@ -199,14 +180,14 @@ const projectSlider = new Swiper('.project-slider', {
         slideChange: function () {
             const videos = document.querySelectorAll('.project-video');
             videos.forEach(video => {
-                const slide = video.closest('.swiper-slide');
-                if (slide.classList.contains('swiper-slide-active')) {
-                    video.play().catch(() => {
-                        console.log('Video play prevented on slide change');
-                    });
-                } else {
-                    video.pause();
-                    video.currentTime = 0;
+                if (video) {
+                    const slide = video.closest('.swiper-slide');
+                    if (slide?.classList.contains('swiper-slide-active')) {
+                        video.play().catch(() => {});
+                    } else {
+                        video.pause();
+                        video.currentTime = 0;
+                    }
                 }
             });
         }
@@ -294,20 +275,22 @@ const stats = [
 
 stats.forEach(stat => {
     const counter = { value: 0 };
+    const element = document.querySelector(stat.element);
     
-    gsap.to(counter, {
-        value: stat.end,
-        duration: isMobile ? 1 : 2,
-        scrollTrigger: {
-            trigger: stat.element,
-            start: "top center+=100",
-            toggleActions: "play none none reverse"
-        },
-        onUpdate: () => {
-            document.querySelector(stat.element).textContent = 
-                Math.round(counter.value);
-        }
-    });
+    if (element) { // Check if element exists
+        gsap.to(counter, {
+            value: stat.end,
+            duration: isMobile ? 1 : 2,
+            scrollTrigger: {
+                trigger: stat.element,
+                start: "top center+=100",
+                toggleActions: "play none none reverse"
+            },
+            onUpdate: () => {
+                element.textContent = Math.round(counter.value);
+            }
+        });
+    }
 });
 
 // Dostosowanie nawigacji na mobile
@@ -346,36 +329,19 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         const targetElement = document.querySelector(targetId);
         
         if (targetElement) {
-            const headerOffset = isMobile ? 40 : 80;
+            const headerOffset = 60; // wysokość nagłówka
             const elementPosition = targetElement.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.scrollY - headerOffset;
 
-            // Płynniejsze scrollowanie na mobile
-            const duration = 800;
-            const start = window.scrollY;
-            const distance = offsetPosition - start;
-            let startTime = null;
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
 
-            function animation(currentTime) {
-                if (startTime === null) startTime = currentTime;
-                const timeElapsed = currentTime - startTime;
-                const progress = Math.min(timeElapsed / duration, 1);
-                
-                // Funkcja ease-out dla płynniejszego ruchu
-                const ease = t => t * (2 - t);
-                
-                window.scrollTo(0, start + (distance * ease(progress)));
-
-                if (timeElapsed < duration) {
-                    requestAnimationFrame(animation);
-                }
-            }
-
-            requestAnimationFrame(animation);
-            
             // Zamknij mobile menu jeśli jest otwarte
-            if (mobileMenu && mobileMenu.classList.contains('active')) {
-                mobileMenuBtn.click();
+            const navbarCollapse = document.querySelector('.navbar-collapse');
+            if (navbarCollapse.classList.contains('show')) {
+                document.querySelector('.navbar-toggler').click();
             }
         }
     });
@@ -695,41 +661,41 @@ if (isMobile) {
 }
 
 // Initialize Locomotive Scroll for smooth section-based scrolling
-const scroll = new LocomotiveScroll({
-    el: document.querySelector('[data-scroll-container]'),
-    smooth: !isMobile, // Wyłącz smooth scroll na mobile
-    multiplier: isMobile ? 1 : 0.8,
-    lerp: isMobile ? 1 : 0.1, // Linear interpolation - natychmiastowa reakcja na mobile
-    smartphone: {
-        smooth: false,
-        getDirection: true,
-        touchMultiplier: 2
-    },
-    tablet: {
-        smooth: false,
-        getDirection: true,
-        touchMultiplier: 2
-    },
-    class: 'is-revealed',
-    reloadOnContextChange: true,
-    touchMultiplier: 2,
-    smoothMobile: false
-});
+// const scroll = new LocomotiveScroll({
+//     el: document.querySelector('[data-scroll-container]'),
+//     smooth: !isMobile, // Wyłącz smooth scroll na mobile
+//     multiplier: isMobile ? 1 : 0.8,
+//     lerp: isMobile ? 1 : 0.1, // Linear interpolation - natychmiastowa reakcja na mobile
+//     smartphone: {
+//         smooth: false,
+//         getDirection: true,
+//         touchMultiplier: 2
+//     },
+//     tablet: {
+//         smooth: false,
+//         getDirection: true,
+//         touchMultiplier: 2
+//     },
+//     class: 'is-revealed',
+//     reloadOnContextChange: true,
+//     touchMultiplier: 2,
+//     smoothMobile: false
+// });
 
 // Popraw zachowanie scrollowania na mobile
 if (isMobile) {
     // Nasłuchuj zdarzeń scroll
-    scroll.on('scroll', (args) => {
-        // Zapobiegaj przewijaniu podczas animacji
-        if (args.scroll.y < 0 || args.scroll.y > args.limit.y) {
-            args.scroll.y = Math.min(Math.max(args.scroll.y, 0), args.limit.y);
-        }
-    });
+    // scroll.on('scroll', (args) => {
+    //     // Zapobiegaj przewijaniu podczas animacji
+    //     if (args.scroll.y < 0 || args.scroll.y > args.limit.y) {
+    //         args.scroll.y = Math.min(Math.max(args.scroll.y, 0), args.limit.y);
+    //     }
+    // });
 
     // Reset scroll position przy zmianie orientacji
     window.addEventListener('orientationchange', () => {
         setTimeout(() => {
-            scroll.update();
+            // scroll.update();
         }, 100);
     });
 }
@@ -739,7 +705,7 @@ let resizeTimer;
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-        scroll.update();
+        // scroll.update();
     }, 250);
 });
 
@@ -755,11 +721,11 @@ function initSections() {
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
     initSections();
-    scroll.update();
+    // scroll.update();
     
     // Aktualizuj scroll po załadowaniu wszystkich obrazów
     window.addEventListener('load', () => {
-        scroll.update();
+        // scroll.update();
     });
 });
 

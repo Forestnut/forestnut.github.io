@@ -1,0 +1,73 @@
+:root {
+    --primary-color: #2563eb;
+    --secondary-color: #1e40af;
+    --accent-color: #3b82f6;
+    --text-color: #1f2937;
+    --bg-color: #ffffff;
+    --light-bg: #f3f4f6;
+    --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    --navbar-height: 70px;
+}
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Layout */
+.section {
+    min-height: 100vh;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    padding: 4rem 0;
+    width: 100%;
+}
+
+.section-content {
+    width: 100%;
+    max-width: 1200px;
+    padding: 0;
+    margin: 0;
+    padding-top: 80px;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    margin: 0 auto;
+}
+
+.scroll-container {
+    height: 100%;
+    padding-bottom: 60px;
+    overflow-y: auto;
+    position: relative;
+    scroll-behavior: smooth;
+    flex: 1 0 auto;
+    height: 100vh;
+    padding-bottom: 80px;
+}

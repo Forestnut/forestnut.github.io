@@ -24,7 +24,6 @@ const questions = [
 
 let currentQuestion = 0;
 let score = 0;
-console.log("test");
 
 function displayQuestion() {
     const questionEl = document.getElementById('question');
