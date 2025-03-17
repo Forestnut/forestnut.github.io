@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tsParticles.load("hero-particles", {
         "particles": {
             "number": {
-                "value": 80,
+                "value": 100,
                 "density": {
                     "enable": true,
                     "value_area": 800
@@ -25,13 +25,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 "anim": { "enable": false }
             },
             "size": {
-                "value": 3,
+                "value": 4,
                 "random": true,
                 "anim": { "enable": false }
             },
             "line_linked": {
                 "enable": true,
-                "distance": 120,
+                "distance": 140,
                 "color": "#ffffff",
                 "opacity": 0.3,
                 "width": 1
@@ -85,14 +85,65 @@ gsap.to("#hero-background", {
     y: isMobile ? 100 : 200
 });
 
+// Zaktualizowana funkcja handleVideoControls
+function handleVideoControls() {
+    const containers = document.querySelectorAll('.video-container');
+    
+    containers.forEach(container => {
+        const video = container.querySelector('video');
+        const fullscreenBtn = container.querySelector('.fullscreen-btn');
+        
+        if (video) {
+            // Set initial state
+            video.muted = true;
+            
+            // Only try to autoplay if video is in viewport
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && video.paused) {
+                        video.play().catch(() => {
+                            console.log('Autoplay prevented, waiting for user interaction');
+                        });
+                    } else {
+                        video.pause();
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            observer.observe(container);
+
+            // Handle fullscreen on click
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Request fullscreen only on user interaction
+                    if (document.fullscreenEnabled) {
+                        video.requestFullscreen().catch((err) => {
+                            console.log('Fullscreen failed:', err);
+                        });
+                    }
+                });
+            }
+        }
+    });
+}
+
+// Wywołaj funkcję po załadowaniu DOM
+document.addEventListener('DOMContentLoaded', handleVideoControls);
+
 // Update Swiper configuration for better mobile experience
 const projectSlider = new Swiper('.project-slider', {
     slidesPerView: 1,
-    spaceBetween: 20,
+    spaceBetween: 30,
     loop: true,
+    loopAdditionalSlides: 2, // Ensure proper looping
+    grabCursor: true,
     autoplay: {
         delay: 3000,
-        disableOnInteraction: false
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true
     },
     pagination: {
         el: '.swiper-pagination',
@@ -104,20 +155,113 @@ const projectSlider = new Swiper('.project-slider', {
         prevEl: '.swiper-button-prev'
     },
     breakpoints: {
-        480: {
-            slidesPerView: 1,
-            spaceBetween: 20
-        },
         768: {
             slidesPerView: 2,
-            spaceBetween: 25
-        },
-        1024: {
-            slidesPerView: 3,
             spaceBetween: 30
+        },
+        1200: {
+            slidesPerView: 2,
+            spaceBetween: 40
+        }
+    },
+    on: {
+        init: function () {
+            handleVideoControls();
+            this.slides.forEach(slide => {
+                const video = slide.querySelector('video');
+                if (video) {
+                    video.muted = true; // Ensure video is muted
+                    if (slide.classList.contains('swiper-slide-active')) {
+                        video.play().catch(() => {}); // Silently handle autoplay rejection
+                    }
+                }
+            });
+        },
+        slideChange: function () {
+            const videos = document.querySelectorAll('.project-video');
+            videos.forEach(video => {
+                if (video) {
+                    const slide = video.closest('.swiper-slide');
+                    if (slide?.classList.contains('swiper-slide-active')) {
+                        video.play().catch(() => {});
+                    } else {
+                        video.pause();
+                        video.currentTime = 0;
+                    }
+                }
+            });
         }
     }
 });
+
+// Pause videos when slider is not in viewport
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        const videos = entry.target.querySelectorAll('video');
+        videos.forEach(video => {
+            if (entry.isIntersecting) {
+                if (video.closest('.swiper-slide-active')) {
+                    video.play();
+                }
+            } else {
+                video.pause();
+            }
+        });
+    });
+}, { threshold: 0.5 });
+
+observer.observe(document.querySelector('.project-slider'));
+
+// Initialize technology slider
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicjalizacja tech slidera
+    const techSlider = new Swiper('.tech-slider .swiper-container', {
+        slidesPerView: 'auto',
+        spaceBetween: 30,
+        centeredSlides: true,
+        loop: true,
+        speed: 800,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        breakpoints: {
+            320: {
+                slidesPerView: 1,
+                spaceBetween: 20
+            },
+            640: {
+                slidesPerView: 2,
+                spaceBetween: 20
+            },
+            768: {
+                slidesPerView: 3,
+                spaceBetween: 30
+            },
+            1024: {
+                slidesPerView: 4,
+                spaceBetween: 30
+            }
+        }
+    });
+
+    // Reszta kodu inicjalizacyjnego...
+});
+
+// Add hover pause functionality
+const techSliderContainer = document.querySelector('.tech-slider');
+if (techSliderContainer) {
+    techSliderContainer.addEventListener('mouseenter', () => {
+        techSlider.autoplay.stop();
+    });
+    techSliderContainer.addEventListener('mouseleave', () => {
+        techSlider.autoplay.start();
+    });
+}
 
 // Optymalizacja animacji statystyk dla mobile
 const stats = [
@@ -128,20 +272,22 @@ const stats = [
 
 stats.forEach(stat => {
     const counter = { value: 0 };
+    const element = document.querySelector(stat.element);
     
-    gsap.to(counter, {
-        value: stat.end,
-        duration: isMobile ? 1 : 2,
-        scrollTrigger: {
-            trigger: stat.element,
-            start: "top center+=100",
-            toggleActions: "play none none reverse"
-        },
-        onUpdate: () => {
-            document.querySelector(stat.element).textContent = 
-                Math.round(counter.value);
-        }
-    });
+    if (element) { // Check if element exists
+        gsap.to(counter, {
+            value: stat.end,
+            duration: isMobile ? 1 : 2,
+            scrollTrigger: {
+                trigger: stat.element,
+                start: "top center+=100",
+                toggleActions: "play none none reverse"
+            },
+            onUpdate: () => {
+                element.textContent = Math.round(counter.value);
+            }
+        });
+    }
 });
 
 // Dostosowanie nawigacji na mobile
@@ -180,36 +326,19 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         const targetElement = document.querySelector(targetId);
         
         if (targetElement) {
-            const headerOffset = isMobile ? 40 : 80;
+            const headerOffset = 60; // wysokość nagłówka
             const elementPosition = targetElement.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.scrollY - headerOffset;
 
-            // Płynniejsze scrollowanie na mobile
-            const duration = 800;
-            const start = window.scrollY;
-            const distance = offsetPosition - start;
-            let startTime = null;
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
 
-            function animation(currentTime) {
-                if (startTime === null) startTime = currentTime;
-                const timeElapsed = currentTime - startTime;
-                const progress = Math.min(timeElapsed / duration, 1);
-                
-                // Funkcja ease-out dla płynniejszego ruchu
-                const ease = t => t * (2 - t);
-                
-                window.scrollTo(0, start + (distance * ease(progress)));
-
-                if (timeElapsed < duration) {
-                    requestAnimationFrame(animation);
-                }
-            }
-
-            requestAnimationFrame(animation);
-            
             // Zamknij mobile menu jeśli jest otwarte
-            if (mobileMenu && mobileMenu.classList.contains('active')) {
-                mobileMenuBtn.click();
+            const navbarCollapse = document.querySelector('.navbar-collapse');
+            if (navbarCollapse.classList.contains('show')) {
+                document.querySelector('.navbar-toggler').click();
             }
         }
     });
@@ -529,41 +658,41 @@ if (isMobile) {
 }
 
 // Initialize Locomotive Scroll for smooth section-based scrolling
-const scroll = new LocomotiveScroll({
-    el: document.querySelector('[data-scroll-container]'),
-    smooth: !isMobile, // Wyłącz smooth scroll na mobile
-    multiplier: isMobile ? 1 : 0.8,
-    lerp: isMobile ? 1 : 0.1, // Linear interpolation - natychmiastowa reakcja na mobile
-    smartphone: {
-        smooth: false,
-        getDirection: true,
-        touchMultiplier: 2
-    },
-    tablet: {
-        smooth: false,
-        getDirection: true,
-        touchMultiplier: 2
-    },
-    class: 'is-revealed',
-    reloadOnContextChange: true,
-    touchMultiplier: 2,
-    smoothMobile: false
-});
+// const scroll = new LocomotiveScroll({
+//     el: document.querySelector('[data-scroll-container]'),
+//     smooth: !isMobile, // Wyłącz smooth scroll na mobile
+//     multiplier: isMobile ? 1 : 0.8,
+//     lerp: isMobile ? 1 : 0.1, // Linear interpolation - natychmiastowa reakcja na mobile
+//     smartphone: {
+//         smooth: false,
+//         getDirection: true,
+//         touchMultiplier: 2
+//     },
+//     tablet: {
+//         smooth: false,
+//         getDirection: true,
+//         touchMultiplier: 2
+//     },
+//     class: 'is-revealed',
+//     reloadOnContextChange: true,
+//     touchMultiplier: 2,
+//     smoothMobile: false
+// });
 
 // Popraw zachowanie scrollowania na mobile
 if (isMobile) {
     // Nasłuchuj zdarzeń scroll
-    scroll.on('scroll', (args) => {
-        // Zapobiegaj przewijaniu podczas animacji
-        if (args.scroll.y < 0 || args.scroll.y > args.limit.y) {
-            args.scroll.y = Math.min(Math.max(args.scroll.y, 0), args.limit.y);
-        }
-    });
+    // scroll.on('scroll', (args) => {
+    //     // Zapobiegaj przewijaniu podczas animacji
+    //     if (args.scroll.y < 0 || args.scroll.y > args.limit.y) {
+    //         args.scroll.y = Math.min(Math.max(args.scroll.y, 0), args.limit.y);
+    //     }
+    // });
 
     // Reset scroll position przy zmianie orientacji
     window.addEventListener('orientationchange', () => {
         setTimeout(() => {
-            scroll.update();
+            // scroll.update();
         }, 100);
     });
 }
@@ -573,7 +702,7 @@ let resizeTimer;
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-        scroll.update();
+        // scroll.update();
     }, 250);
 });
 
@@ -589,11 +718,11 @@ function initSections() {
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
     initSections();
-    scroll.update();
+    // scroll.update();
     
     // Aktualizuj scroll po załadowaniu wszystkich obrazów
     window.addEventListener('load', () => {
-        scroll.update();
+        // scroll.update();
     });
 });
 
@@ -810,4 +939,48 @@ gsap.from('.testimonial-card', {
     opacity: 0,
     duration: 0.8,
     stagger: 0.2
+});
+
+// Update section heights based on content
+function updateSectionHeights() {
+    document.querySelectorAll('.section').forEach(section => {
+        const content = section.querySelector('.container');
+        if (content) {
+            const contentHeight = content.offsetHeight;
+            const windowHeight = window.innerHeight;
+            section.style.minHeight = contentHeight > windowHeight ? 'auto' : '100vh';
+        }
+    });
+}
+
+// Call on load and resize
+window.addEventListener('load', updateSectionHeights);
+window.addEventListener('resize', updateSectionHeights);
+
+// Optimize mobile performance
+if (isMobile) {
+    document.querySelectorAll('.section').forEach(section => {
+        section.style.height = 'auto';
+        section.style.minHeight = 'auto';
+    });
+}
+
+// Dodaj obserwator widoczności dla kontenerów video
+const videoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        const video = entry.target.querySelector('video');
+        if (video) {
+            if (entry.isIntersecting) {
+                video.play().catch(() => {
+                    console.log('Video play prevented by visibility observer');
+                });
+            } else {
+                video.pause();
+            }
+        }
+    });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.video-container').forEach(container => {
+    videoObserver.observe(container);
 });

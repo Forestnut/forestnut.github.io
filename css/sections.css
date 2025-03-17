@@ -1,0 +1,67 @@
+/* Hero Section */
+#hero {
+    position: relative;
+    overflow: hidden;
+    background-color: #000;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    height: 100vh;
+    padding-bottom: 40px;
+    min-height: 100vh;
+}
+
+/* Profile Section */
+#profile {
+    padding: 0;
+    padding-top: 80px;
+    min-height: calc(100vh - 80px);
+}
+
+/* Game Section */
+#game {
+    padding: 0.5rem 0.5rem 60px !important;
+    min-height: calc(100vh - 60px) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important; /* Dodane wycentrowanie pionowe */
+    gap: 0.25rem !important;
+}
+
+#game .container {
+    padding: 0 !important;
+    margin: 0 auto !important; /* Wycentrowanie poziome */
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    min-height: calc(100vh - 120px) !important; /* Wysokość ekranu minus navbar i footer */
+}
+
+/* Stats Section */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin: 2rem 0;
+    width: 100%;
+}
+
+/* Projects Section */
+.project-slider {
+    height: auto;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Footer Section */
+.footer-content {
+    opacity: 0;
+    visibility: hidden;
+    height: 100vh;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+    padding: 3rem 0;
+    background: linear-gradient(135deg, rgba(26, 35, 126, 0.98) 0%, rgba(25, 118, 210, 0.98) 100%);
+}

@@ -1,0 +1,141 @@
+/* Navbar */
+.navbar {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    height: var(--navbar-height);
+    transition: transform 0.3s ease-in-out;
+    transform: translateY(0);
+}
+
+.navbar-hidden {
+    transform: translateY(-100%) !important;
+}
+
+.nav-link {
+    font-weight: 500;
+    color: var(--text-color) !important;
+    padding: 0.5rem 1rem;
+    margin: 0 0.2rem;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative;
+    cursor: pointer;
+}
+
+/* Buttons */
+.cta-button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: var(--gradient-primary);
+    color: white !important;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+}
+
+/* Cards */
+.tech-item {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+/* Game Components */
+.game-container {
+    width: calc(100% - 2rem) !important; /* Dodanie marginesów bocznych */
+    max-width: 450px !important;
+    margin: 0 auto !important;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    padding: 0.75rem !important;
+    height: auto;
+}
+
+.code-options {
+    display: grid;
+    gap: 0.25rem !important;
+    grid-template-columns: 1fr 1fr !important;
+    margin: 0.25rem 0 !important;
+}
+
+.game-visualization {
+    height: 120px !important;
+    max-height: 120px !important;
+    min-height: unset !important;
+}
+
+/* Game Complete Screen */
+.game-complete {
+    text-align: center;
+    padding: 2rem !important;
+    border-radius: 15px;
+    animation: fadeIn 0.5s ease;
+}
+
+.game-complete h3 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.game-complete p {
+    color: var(--text-color);
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.visit-school-btn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    margin-top: 1rem;
+}
+
+.visit-school-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Footer Components */
+.footer {
+    background: var(--gradient-primary);
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+    height: 60px;
+    transition: all 0.3s ease;
+    margin-top: auto;
+}
