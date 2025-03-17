@@ -213,46 +213,43 @@ const observer = new IntersectionObserver((entries) => {
 observer.observe(document.querySelector('.project-slider'));
 
 // Initialize technology slider
-const techSlider = new Swiper('.tech-slider .swiper-container', {
-    effect: 'coverflow',
-    grabCursor: true,
-    centeredSlides: true,
-    slidesPerView: 'auto',
-    initialSlide: 2,
-    loop: true,
-    speed: 800, // Szybsza animacja przejścia
-    autoplay: {
-        delay: 2000, // Szybsza zmiana slajdów (2 sekundy)
-        disableOnInteraction: false,
-        pauseOnMouseEnter: true,
-        waitForTransition: true
-    },
-    coverflowEffect: {
-        rotate: 0,
-        stretch: 0,
-        depth: 100,
-        modifier: 2,
-        slideShadows: false,
-    },
-    pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-        dynamicBullets: true,
-    },
-    breakpoints: {
-        320: {
-            slidesPerView: 1,
-            spaceBetween: 20
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicjalizacja tech slidera
+    const techSlider = new Swiper('.tech-slider .swiper-container', {
+        slidesPerView: 'auto',
+        spaceBetween: 30,
+        centeredSlides: true,
+        loop: true,
+        speed: 800,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
         },
-        640: {
-            slidesPerView: 2,
-            spaceBetween: 30
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
         },
-        992: {
-            slidesPerView: 3,
-            spaceBetween: 40
+        breakpoints: {
+            320: {
+                slidesPerView: 1,
+                spaceBetween: 20
+            },
+            640: {
+                slidesPerView: 2,
+                spaceBetween: 20
+            },
+            768: {
+                slidesPerView: 3,
+                spaceBetween: 30
+            },
+            1024: {
+                slidesPerView: 4,
+                spaceBetween: 30
+            }
         }
-    }
+    });
+
+    // Reszta kodu inicjalizacyjnego...
 });
 
 // Add hover pause functionality

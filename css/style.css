@@ -2134,10 +2134,29 @@ body {
 /* Technology Slider Styles */
 .tech-slider {
     position: relative;
+    margin-bottom: 2.5rem;
 }
 
 .swiper-container {
     padding: 30px;
+    margin-bottom: 1rem;
+}
+
+.swiper-pagination {
+    position: relative;
+    bottom: 0;
+    margin-top: 1rem;
+}
+
+.more-technologies {
+    text-align: center;
+}
+
+.more-technologies h3 {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    margin: 0;
+    font-weight: 600;
 }
 
 .tech-card {
@@ -2154,6 +2173,11 @@ body {
     align-items: center;
     justify-content: center;
     text-align: center;
+}
+
+.tech-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
 }
 
 .tech-card i {
@@ -2175,50 +2199,6 @@ body {
     font-size: 0.9rem;
     color: var(--text-color);
     opacity: 0.8;
-}
-
-.swiper-slide {
-    opacity: 0.4;
-    transform: scale(0.8);
-    transition: all 0.3s ease;
-}
-
-.swiper-slide-active {
-    opacity: 1;
-    transform: scale(1);
-}
-
-.swiper-pagination {
-    position: relative;
-    margin-top: 20px;
-}
-
-.swiper-pagination-bullet {
-    background: var(--primary-color);
-    opacity: 0.5;
-}
-
-.swiper-pagination-bullet-active {
-    opacity: 1;
-}
-
-@media (max-width: 768px) {
-    .tech-card {
-        height: 200px;
-        padding: 1.5rem;
-    }
-
-    .tech-card i {
-        font-size: 2.5rem;
-    }
-
-    .tech-card h3 {
-        font-size: 1.2rem;
-    }
-
-    .tech-card p {
-        font-size: 0.8rem;
-    }
 }
 
 .video-container {
