@@ -2975,6 +2975,15 @@ body {
     margin-top: auto;
 }
 
+footer a{
+    color: #FFF;
+    text-decoration: none;
+}
+footer a:hover{
+    color: #FFF;
+    text-decoration: underline;
+}
+
 .footer.expanded {
     height: calc(100vh - var(--navbar-height));
 }
