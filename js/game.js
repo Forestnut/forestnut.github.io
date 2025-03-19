@@ -1,68 +1,68 @@
 const gameLevels = [
     {
-        question: "Jakim językiem programowania zaczniemy naszą przygodę?",
-        mainQuestion: "Poziom 1: Początek przygody z programowaniem",
+        question: "Co oznacza skrót HTML?",
+        mainQuestion: "Poziom 1",
         options: [
-            "Java - zaawansowany język obiektowy",
-            "HTML - podstawowy język stron WWW",
-            "Python - złożony język skryptowy",
-            "C++ - niskopoziomowy język"
+            "HyperText Markup Language",
+            "HighText Markup Language",
+            "Hyper Transfer Markup Language",
+            "High Transfer Markup Language"
         ],
-        correctAnswer: 1,
-        movement: 100,
-        hint: "Wybierz najbardziej podstawowy język do tworzenia stron internetowych"
+        correctAnswer: 0,
+        movement: 60,
+        hint: "HTML jest podstawowym językiem znaczników dla stron internetowych"
     },
     {
-        question: "Który język wykorzystamy do stylizacji strony?",
-        mainQuestion: "Poziom 2: Dodajemy style do naszej strony",
+        question: "Co to jest zmienna w programowaniu?",
+        mainQuestion: "Poziom 2",
         options: [
-            "JavaScript - do interakcji",
-            "CSS - do stylizacji",
-            "PHP - do backendu",
-            "SQL - do baz danych"
+            "To funkcja, która wykonuje operacje matematyczne",
+            "To miejsce w pamięci, gdzie przechowywana jest wartość",
+            "To typ danych, który przechowuje tekst",
+            "To blok kodu, który wykonuje określoną czynność"
         ],
         correctAnswer: 1,
-        movement: 100,
-        hint: "CSS jest odpowiedzialny za wygląd stron WWW"
+        movement: 60,
+        hint: "Zmienne przechowują wartości, które mogą się zmieniać w czasie działania programu"
     },
     {
-        question: "Co dodamy, aby strona była interaktywna?",
-        mainQuestion: "Poziom 3: Czas na interaktywność",
+        question: "Jaki jest cel stosowania pętli w programowaniu?",
+        mainQuestion: "Poziom 3",
         options: [
-            "Więcej HTML",
-            "JavaScript",
-            "Więcej CSS",
-            "XML"
+            "Wykonanie kodu raz",
+            "Pętla pozwala na wielokrotne wykonanie tego samego kodu",
+            "Stworzenie funkcji",
+            "Sprawdzenie warunku logicznego"
         ],
         correctAnswer: 1,
-        movement: 100,
-        hint: "JavaScript pozwala na tworzenie interaktywnych elementów"
+        movement: 60,
+        hint: "Pętla umożliwia wielokrotne wykonywanie tego samego fragmentu kodu"
     },
     {
-        question: "Jaki framework JavaScript wybierzemy?",
-        mainQuestion: "Poziom 4: Wybieramy framework",
+        question: "Jakie dane przechowujemy za pomocą typu Boolean?",
+        mainQuestion: "Poziom 4",
         options: [
-            "Angular - złożony framework",
-            "React - popularny framework",
-            "Vue - prosty framework",
-            "Svelte - nowy framework"
-        ],
-        correctAnswer: 1,
-        movement: 100,
-        hint: "React jest obecnie najpopularniejszym frameworkiem"
-    },
-    {
-        question: "Czego użyjemy do przechowywania danych?",
-        mainQuestion: "Poziom 5: Baza danych",
-        options: [
-            "Pliki tekstowe",
-            "MongoDB - baza NoSQL",
-            "MySQL - baza SQL",
-            "Firebase - baza czasu rzeczywistego"
+            "Liczby zmiennoprzecinkowe",
+            "Tekstowe ciągi znaków",
+            "Prawda lub fałsz",
+            "Liczby całkowite"
         ],
         correctAnswer: 2,
-        movement: 100,
-        hint: "MySQL jest świetnym wyborem na początek przygody z bazami danych"
+        movement: 60,
+        hint: "Typ Boolean przechowuje jedynie dwie wartości: prawda (true) lub fałsz (false)"
+    },
+    {
+        question: "Do czego służy SQL?",
+        mainQuestion: "Poziom 5",
+        options: [
+            "Do tworzenia aplikacji internetowych",
+            "Do zarządzania bazami danych",
+            "Do tworzenia gier komputerowych",
+            "Do programowania systemów operacyjnych"
+        ],
+        correctAnswer: 1,
+        movement: 60,
+        hint: "SQL (Structured Query Language) służy do zarządzania bazami danych"
     }
 ];
 
@@ -170,12 +170,14 @@ class Game {
                     this.updateProgress();
                     buttons.forEach(button => button.disabled = false);
                 } else {
-                    // Animacja końcowa
-                    this.character.style.transform = `translateX(${window.innerWidth - 100}px)`;
+                    // Zmodyfikowana sekwencja końcowa
                     setTimeout(() => {
+                        this.character.style.transform = `translateX(${window.innerWidth - 100}px)`;
                         this.character.style.opacity = '0';
-                        this.showGameComplete();
-                    }, 1000);
+                        setTimeout(() => {
+                            this.showGameComplete();
+                        }, 1000);
+                    }, 500);
                 }
             }, 1500);
         } else {
@@ -271,7 +273,7 @@ class Game {
     addTransitionEndListener() {
         if (this.character) {
             this.character.addEventListener('transitionend', (e) => {
-                if (e.propertyName === 'transform' && this.currentLevel === gameLevels.length - 1) {
+                if (e.propertyName === 'transform' && this.currentLevel === gameLevels.length) {
                     this.character.style.transform += ' scale(0)';
                     setTimeout(() => {
                         this.showGameComplete();
