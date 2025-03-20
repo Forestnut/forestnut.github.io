@@ -97,6 +97,17 @@ function handleVideoControls() {
             // Set initial state
             video.muted = true;
             
+            // Add fullscreen change event listener
+            document.addEventListener('fullscreenchange', () => {
+                if (!document.fullscreenElement) {
+                    // Po wyjściu z trybu pełnoekranowego
+                    const projectsSection = document.querySelector('#projects');
+                    if (projectsSection) {
+                        projectsSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+            
             // Only try to autoplay if video is in viewport
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -171,9 +182,7 @@ const projectSlider = new Swiper('.project-slider', {
                 const video = slide.querySelector('video');
                 if (video) {
                     video.muted = true; // Ensure video is muted
-                    if (slide.classList.contains('swiper-slide-active')) {
-                        video.play().catch(() => {}); // Silently handle autoplay rejection
-                    }
+                    video.play().catch(() => {}); // Play all videos
                 }
             });
         },
@@ -181,13 +190,7 @@ const projectSlider = new Swiper('.project-slider', {
             const videos = document.querySelectorAll('.project-video');
             videos.forEach(video => {
                 if (video) {
-                    const slide = video.closest('.swiper-slide');
-                    if (slide?.classList.contains('swiper-slide-active')) {
-                        video.play().catch(() => {});
-                    } else {
-                        video.pause();
-                        video.currentTime = 0;
-                    }
+                    video.play().catch(() => {}); // Always play videos
                 }
             });
         }
@@ -983,8 +986,6 @@ const videoObserver = new IntersectionObserver((entries) => {
                 video.play().catch(() => {
                     console.log('Video play prevented by visibility observer');
                 });
-            } else {
-                video.pause();
             }
         }
     });
